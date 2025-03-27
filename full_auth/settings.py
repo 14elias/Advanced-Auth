@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 from os import getenv
+import os
 from pathlib import Path
 from django.core.management.utils import get_random_secret_key
 import dotenv
@@ -136,8 +137,21 @@ REST_FRAMEWORK = {
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT=BASE_DIR/'static'
+MEDIA_URL='media/'
+MEDIA_ROOT=BASE_DIR/'media'
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+DJOSER = {
+    'PASSWORD_RESET_CONFIRM_URL': 'password-reset/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'USER_CREATE_PASSWORD_RETYPE':True,
+    'PASSWORD_RESET_CONFIRM_RETYPE':True,
+    'TOKEN_MODEL':None,
+}
