@@ -9,21 +9,31 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from os import getenv
 from pathlib import Path
+from django.core.management.utils import get_random_secret_key
+import dotenv
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+env_file=BASE_DIR/'.env.local'
+
+if Path.is_file(env_file):
+    dotenv.load_dotenv(env_file)
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-hgdbargcv#-)2mk$&2ttc2jb_9yomgbchzg=nncr6x!8t1%$-o'
 
+# SECRET_KEY = 'django-insecure-hgdbargcv#-)2mk$&2ttc2jb_9yomgbchzg=nncr6x!8t1%$-o'
+
+SECRET_KEY=getenv('DJANGO_SECRET_KEY',get_random_secret_key())
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = getenv('DEBUG','FALSE')=='True'
 
 ALLOWED_HOSTS = []
 
@@ -37,6 +47,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -112,6 +124,14 @@ USE_I18N = True
 USE_TZ = True
 
 
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ],
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ]
+}
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
